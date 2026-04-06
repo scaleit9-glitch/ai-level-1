@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 1 — AI Tools | AI Wealth Group</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --white:#12121a;
+  --purple:#7C6FF7;
+  --purple-light:rgba(124,111,247,0.12);
+  --purple-mid:#a78bfa;
+  --teal:#1D9E75;
+  --teal-light:rgba(29,158,117,0.12);
+  --amber:#BA7517;
+  --amber-light:rgba(186,117,23,0.12);
+  --red:#E24B4A;
+  --red-light:rgba(226,75,74,0.12);
+  --blue:#378ADD;
+  --blue-light:rgba(55,138,221,0.12);
+  --green:#639922;
+  --green-light:rgba(99,153,34,0.12);
+  --coral:#D85A30;
+  --coral-light:rgba(216,90,48,0.12);
+  --gray-dark:#e8e8ef;
+  --gray-mid:#8888a0;
+  --gray-light:#1e1e2e;
+  --gray-bg:#12121a;
+  --border:0.5px solid var(--gray-light);
+  --r-md:8px;
+  --r-lg:12px;
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--gray-dark);line-height:1.6;padding:0}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* ── Text safety ── */
+.p14,.p13,.p12,.tool-text,.tip-text,.info-text,.step-desc,.prompt-text,.bridge-sub{word-break:break-word;overflow-wrap:break-word}
+.lesson-title,.which-use,.challenge-cat-text{word-break:break-word;overflow-wrap:break-word}
+
+/* ── Layout ── */
+.wrap{max-width:780px;margin:0 auto;padding:2rem 1.25rem 3rem}
+.chapter-header{border-left:3px solid var(--purple);padding-left:1rem;margin-bottom:2rem}
+.chapter-label{font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.chapter-title{font-size:22px;font-weight:600;color:var(--gray-dark);line-height:1.3}
+.chapter-sub{font-size:14px;color:var(--gray-mid);margin-top:5px}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem;padding-bottom:12px;border-bottom:var(--border)}
+.tab{padding:6px 14px;font-size:13px;font-weight:500;border-radius:var(--r-md);border:0.5px solid var(--gray-light);background:transparent;color:var(--gray-mid);cursor:pointer;transition:all .15s;font-family:inherit}
+.tab.on{background:var(--purple-light);color:var(--purple-mid);border-color:#AFA9EC}
+.tab:hover:not(.on){background:var(--gray-bg)}
+.sec{display:none}.sec.on{display:block}
+
+/* ── Cards ── */
+.card{background:var(--white);border:var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.ct{font-size:15px;font-weight:600;color:var(--gray-dark);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dp{background:var(--purple)}.dt{background:var(--teal)}.da{background:var(--amber)}
+.dg{background:var(--green)}.dr{background:var(--red)}.db{background:var(--blue)}
+.dc{background:var(--coral)}.dgr{background:var(--gray-mid)}
+
+/* ── Typography ── */
+.p14{font-size:14px;color:var(--gray-dark);line-height:1.65}
+.p13{font-size:13px;color:var(--gray-mid);line-height:1.6}
+.p12{font-size:12px;color:var(--gray-mid);line-height:1.5}
+
+/* ── Grids ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem}
+
+/* ── Stat boxes ── */
+.sc{background:var(--gray-bg);border-radius:var(--r-md);padding:.75rem 1rem}
+.sn{font-size:22px;font-weight:600;color:var(--gray-dark)}
+.sl{font-size:12px;color:var(--gray-mid);margin-top:2px}
+
+/* ── Badges ── */
+.bdg{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--r-md);font-weight:600;margin:2px}
+.bp{background:var(--purple-light);color:var(--purple-mid)}
+.bt{background:var(--teal-light);color:var(--teal)}
+.ba{background:var(--amber-light);color:var(--amber)}
+.bg{background:var(--green-light);color:var(--green)}
+.br{background:var(--red-light);color:var(--red)}
+.bb{background:var(--blue-light);color:var(--blue)}
+.bc{background:var(--coral-light);color:var(--coral)}
+
+/* ── Tool card ── */
+.tool-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1rem}
+.tool-card.blue{border:0.5px solid var(--blue)}
+.tool-card.coral{border:0.5px solid var(--coral)}
+.tool-card.teal{border:0.5px solid var(--teal)}
+.tool-card.amber{border:0.5px solid var(--amber)}
+.tool-card.red{border:0.5px solid var(--red)}
+.tool-card.green{border:0.5px solid var(--green)}
+.tool-card.purple{border:0.5px solid var(--purple)}
+.tool-head{padding:.75rem 1.25rem;display:flex;justify-content:space-between;align-items:center}
+.tool-head.blue{background:var(--blue)}.tool-head.coral{background:var(--coral)}
+.tool-head.teal{background:var(--teal)}.tool-head.amber{background:var(--amber)}
+.tool-head.red{background:var(--red)}.tool-head.green{background:var(--green)}
+.tool-head.purple{background:var(--purple)}
+.tool-name{font-size:16px;font-weight:600;color:#fff}
+.tool-url{font-size:12px;color:rgba(255,255,255,.75)}
+.tool-body{padding:1rem 1.25rem}
+.tool-row{margin-bottom:.6rem}
+.tool-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.tool-label.blue{color:var(--blue)}.tool-label.coral{color:var(--coral)}
+.tool-label.teal{color:var(--teal)}.tool-label.amber{color:var(--amber)}
+.tool-label.red{color:var(--red)}.tool-label.green{color:var(--green)}
+.tool-label.purple{color:var(--purple)}
+.tool-text{font-size:13px;color:var(--gray-dark);line-height:1.55}
+.pricing-strip{background:#0f0f18;border-radius:0 0 var(--r-lg) var(--r-lg);padding:.6rem 1.25rem;display:flex;gap:1rem;flex-wrap:wrap}
+.price-item{font-size:12px;color:var(--gray-dark)}
+.price-label{font-weight:600;margin-right:4px}
+.free-label{color:var(--teal)}.paid-label{color:var(--amber)}
+
+/* ── Step rows ── */
+.step-list{display:flex;flex-direction:column;gap:8px}
+.step-item{display:flex;gap:10px;padding:.5rem 0;border-bottom:0.5px solid var(--gray-light)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff}
+.step-body{flex:1}
+.step-title{font-size:14px;font-weight:600;color:var(--gray-dark);margin-bottom:2px}
+.step-desc{font-size:13px;color:var(--gray-mid);line-height:1.5}
+
+/* ── Tip/warn boxes ── */
+.tip-box{background:rgba(55,138,221,0.1);border:0.5px solid rgba(55,138,221,0.25);border-radius:var(--r-md);padding:.7rem 1rem;margin-bottom:.75rem}
+.tip-label{font-size:10px;font-weight:600;color:#60a5fa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.tip-text{font-size:13px;color:var(--gray-dark);line-height:1.55}
+.warn-box{background:rgba(186,117,23,0.1);border:0.5px solid rgba(186,117,23,0.25);border-radius:var(--r-md);padding:.7rem 1rem;margin-bottom:.75rem}
+.warn-label{font-size:10px;font-weight:600;color:#fbbf24;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.info-box{background:rgba(124,111,247,0.1);border:0.5px solid rgba(124,111,247,0.25);border-radius:var(--r-md);padding:.7rem 1rem;margin-bottom:.75rem}
+.info-label{font-size:10px;font-weight:600;color:#a78bfa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.info-text{font-size:13px;color:var(--gray-dark);line-height:1.55}
+.success-box{background:rgba(99,153,34,0.1);border:0.5px solid rgba(99,153,34,0.25);border-radius:var(--r-md);padding:.7rem 1rem;margin-bottom:.75rem}
+.success-label{font-size:10px;font-weight:600;color:#4ade80;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+
+/* ── Flow diagram ── */
+.flow{display:flex;align-items:center;gap:4px;margin-bottom:1rem;flex-wrap:wrap}
+.flow-box{background:var(--white);border-radius:var(--r-md);padding:.5rem .8rem;text-align:center;flex:1;min-width:90px}
+.flow-box .fn{font-size:13px;font-weight:600;color:var(--gray-dark)}
+.flow-box .fs{font-size:11px;color:var(--gray-mid);margin-top:2px}
+.flow-arrow{font-size:16px;color:var(--gray-light);flex-shrink:0}
+
+/* ── Prompts ── */
+.prompt-card{background:#12121a;border:0.5px solid rgba(55,138,221,0.25);border-radius:var(--r-lg);padding:.85rem 1rem;margin-bottom:.75rem}
+.prompt-title{font-size:11px;font-weight:600;color:#60a5fa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.prompt-text{font-size:12.5px;color:var(--gray-mid);line-height:1.6;font-family:'DM Mono',monospace;white-space:pre-wrap;word-break:break-word}
+
+/* ── Toggle ── */
+.acc{cursor:pointer}
+.acc-head{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:0.5px solid var(--gray-light)}
+.acc-body{display:none;padding:.65rem 0 .2rem}
+.acc-body.open{display:block}
+.acc-arrow{font-size:12px;color:var(--gray-mid);transition:transform .2s;display:inline-block}
+.acc-arrow.open{transform:rotate(90deg)}
+
+/* ── Learning path ── */
+.lpath{display:flex;gap:4px;align-items:center;margin-bottom:1rem;flex-wrap:wrap;row-gap:8px}
+.lp-box{flex:1;border-radius:var(--r-md);padding:.5rem;text-align:center;border:0.5px solid var(--gray-light)}
+.lp-box.active{background:var(--purple);border-color:var(--purple)}
+.lp-box.done{background:var(--gray-bg)}
+.lp-box.future{background:transparent;opacity:.5}
+.lp-num{font-size:12px;font-weight:600;margin-bottom:2px}
+.lp-box.active .lp-num{color:#fff}
+.lp-box.done .lp-num,.lp-box.future .lp-num{color:var(--gray-mid)}
+.lp-name{font-size:10px}
+.lp-box.active .lp-name{color:rgba(255,255,255,.85)}
+.lp-box.done .lp-name,.lp-box.future .lp-name{color:var(--gray-mid)}
+.lp-arrow{color:var(--gray-light);font-size:14px;flex-shrink:0}
+
+/* ── Lesson overview mini cards ── */
+.lesson-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+.lesson-card{background:var(--white);border:0.5px solid var(--gray-light);border-radius:var(--r-md);padding:.6rem .75rem;position:relative;overflow:hidden}
+.lesson-top{height:2px;border-radius:2px;margin-bottom:.5rem}
+.lesson-num{font-size:10px;font-weight:600;margin-bottom:3px}
+.lesson-title{font-size:12px;font-weight:500;color:var(--gray-dark);line-height:1.3}
+
+/* ── Reference table ── */
+.ref-table{width:100%;border-collapse:collapse;font-size:13px}
+.ref-table th{background:#1a1a26;color:#e8e8ef;font-weight:600;padding:6px 8px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.ref-table td{padding:6px 8px;border-bottom:0.5px solid var(--gray-light);vertical-align:middle}
+.ref-table tr:nth-child(even) td{background:var(--gray-bg)}
+.tool-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* ── Challenge cards ── */
+.challenge-card{border-radius:var(--r-lg);overflow:hidden;margin-bottom:1rem;position:relative}
+.challenge-card.weekly{border:0.5px solid rgba(186,117,23,0.4)}
+.challenge-card.monthly{border:2px solid rgba(124,111,247,0.5)}
+.challenge-head{padding:.85rem 1.25rem;display:flex;justify-content:space-between;align-items:flex-start}
+.challenge-head.weekly{background:rgba(186,117,23,0.12)}
+.challenge-head.monthly{background:rgba(124,111,247,0.12)}
+.challenge-title{font-size:15px;font-weight:600}
+.challenge-head.weekly .challenge-title{color:var(--amber)}
+.challenge-head.monthly .challenge-title{color:var(--purple-mid)}
+.prize-pill{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.prize-pill.weekly{background:var(--amber);color:#fff}
+.prize-pill.monthly{background:var(--purple);color:#fff}
+.challenge-body{background:var(--white);padding:1rem 1.25rem}
+.challenge-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem}
+.challenge-cat{display:flex;align-items:center;gap:6px;background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .75rem;min-width:0}
+.challenge-cat-icon{font-size:14px}
+.challenge-cat-text{font-size:12px;font-weight:500;color:var(--gray-dark)}
+.rules-list{display:flex;flex-direction:column;gap:5px}
+.rule-item{display:flex;gap:8px;font-size:13px;color:var(--gray-dark);align-items:flex-start}
+.rule-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.rule-dot.amber{background:var(--amber)}.rule-dot.purple{background:var(--purple)}
+.hw-box{background:var(--gray-bg);border:0.5px solid var(--gray-light);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-top:1rem}
+.hw-title{font-size:13px;font-weight:600;color:var(--gray-dark);margin-bottom:8px}
+.hw-item{display:flex;gap:8px;align-items:flex-start;padding:.3rem 0;font-size:13px;color:var(--gray-dark)}
+.hw-cb{width:16px;height:16px;border-radius:3px;border:0.5px solid var(--gray-light);flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:#7C6FF7}
+
+/* ── Divider ── */
+.divider{border:none;border-top:0.5px solid var(--gray-light);margin:1rem 0}
+.section-label{font-size:12px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+
+/* ── Which tool guide ── */
+.which-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
+.which-card{background:var(--white);border-radius:var(--r-md);padding:.7rem .85rem;border:0.5px solid var(--gray-light)}
+.which-use{font-size:12px;color:var(--gray-mid);margin-bottom:4px;line-height:1.4}
+.which-tool{font-size:13px;font-weight:600}
+
+/* ── Bridge banner ── */
+.bridge-banner{background:#1a1a26;border:0.5px solid #2a2a3a;border-radius:var(--r-lg);padding:1.25rem 1.5rem;margin-top:1.5rem}
+.bridge-title{font-size:14px;font-weight:600;color:#e8e8ef;margin-bottom:4px}
+.bridge-sub{font-size:13px;color:#B4B2A9;line-height:1.55}
+
+@media(max-width:520px){
+  .g2,.g3,.g4,.lesson-grid,.which-grid{grid-template-columns:1fr}
+  .lpath{flex-wrap:wrap}
+  .flow{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+  <span style="background:var(--gray-bg);border:0.5px solid var(--gray-light);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--gray-mid)">AI WEALTH GROUP</span>
+  <span style="font-size:11px;color:var(--gray-light)">·</span>
+  <span style="background:rgba(124,111,247,0.15);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600;color:#a78bfa">LEVEL 1 OF 5</span>
+</div>
+<div class="chapter-header">
+  <div class="chapter-label">Level 1 · AI Wealth Group</div>
+  <div class="chapter-title">AI Tools & Tech Stack Masterclass</div>
+  <div class="chapter-sub">Every tool you need — what it does, why it matters, and exactly when to use it</div>
+</div>
+
+<!-- Learning path -->
+<div class="lpath">
+  <div class="lp-box done"><div class="lp-num">L0</div><div class="lp-name">Foundations</div></div>
+  <div class="lp-arrow">›</div>
+  <div class="lp-box active"><div class="lp-num">L1</div><div class="lp-name">AI Tools</div></div>
+  <div class="lp-arrow">›</div>
+  <div class="lp-box future"><div class="lp-num">L2</div><div class="lp-name">Marketing</div></div>
+  <div class="lp-arrow">›</div>
+  <div class="lp-box future"><div class="lp-num">L3</div><div class="lp-name">Monetization</div></div>
+
+</div>
+
+<!-- Stats -->
+<div class="g3" style="margin-bottom:1.5rem">
+  <div class="sc"><div class="sn" style="color:var(--purple)">7</div><div class="sl">Lessons in this module</div></div>
+  <div class="sc"><div class="sn" style="color:var(--teal)">3</div><div class="sl">Categories: Brain / Create / Distribute</div></div>
+
+  <div class="sc"><div class="sn" style="color:var(--green)">0</div><div class="sl">Prior experience needed</div></div>
+</div>
+
+<div class="info-box">
+  <div class="info-label">Mindset first</div>
+  <div class="info-text">This is NOT an AI tool course. This is an income leverage system. Tools are vehicles — execution is the destination. Learn each tool as you need it. Action first, perfection later.</div>
+</div>
+
+<!-- What you'll create -->
+<p class="section-label" style="margin-top:1.25rem">By the end of Level 1 — you'll create 3 types of AI content</p>
+<div class="g3" style="margin-bottom:.75rem">
+  <div style="background:var(--white);border:0.5px solid var(--coral);border-radius:var(--r-lg);padding:1rem 1.1rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--coral)"></div>
+    <div style="font-size:20px;margin-bottom:6px">🎬</div>
+    <div style="font-size:14px;font-weight:600;color:var(--coral);margin-bottom:4px">AI UGC</div>
+    <div class="p13" style="margin-bottom:8px">Authentic-looking video content made entirely by AI — designed to feel like a real person filmed it. Used for product reviews, testimonials, and brand promotions.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px">
+      <span class="bdg bc">Higgsfield</span><span class="bdg bt">ElevenLabs</span><span class="bdg br">CapCut</span>
+    </div>
+  </div>
+  <div style="background:var(--white);border:0.5px solid var(--amber);border-radius:var(--r-lg);padding:1rem 1.1rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber)"></div>
+    <div style="font-size:20px;margin-bottom:6px">📦</div>
+    <div style="font-size:14px;font-weight:600;color:var(--amber);margin-bottom:4px">AI Ads</div>
+    <div class="p13" style="margin-bottom:8px">Short promotional videos and product demos generated with AI. Eye-catching clips built to sell — no filming or editing experience needed.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px">
+      <span class="bdg ba">Kling AI</span><span class="bdg ba">Nano Banana</span><span class="bdg bb">ChatGPT</span>
+    </div>
+  </div>
+  <div style="background:var(--white);border:0.5px solid var(--purple);border-radius:var(--r-lg);padding:1rem 1.1rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--purple)"></div>
+    <div style="font-size:20px;margin-bottom:6px">👤</div>
+    <div style="font-size:14px;font-weight:600;color:var(--purple-mid);margin-bottom:4px">AI Influencer Content</div>
+    <div class="p13" style="margin-bottom:8px">A fully AI-generated persona — realistic face, voice, and movement — that posts content and builds an audience without you ever appearing on camera.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px">
+      <span class="bdg bc">Higgsfield</span><span class="bdg bt">Hedra</span><span class="bdg bp">Claude</span>
+    </div>
+  </div>
+</div>
+<div class="tip-box" style="margin-bottom:1.5rem">
+  <div class="tip-label">Same tools — three outputs</div>
+  <div class="tip-text">Every tool in Level 1 serves at least one of these content types. The workflow is identical — write a script, generate a video, edit and post. What changes is the <strong>intent</strong>: are you creating for a brand (UGC), for a product (Ads), or for your own audience (Influencer)? That distinction is what turns a tool skill into an income skill.</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab on" onclick="sw('overview',this)">Overview</button>
+  <button class="tab" onclick="sw('brain',this)">Brain Tools</button>
+  <button class="tab" onclick="sw('create',this)">Create Tools</button>
+  <button class="tab" onclick="sw('distribute',this)">Distribute</button>
+  <button class="tab" onclick="sw('which',this)">Which Tool?</button>
+  <button class="tab" onclick="sw('challenges',this)">Challenges</button>
+  <button class="tab" onclick="sw('homework',this)">Homework</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     OVERVIEW
+══════════════════════════════════════════════ -->
+<div id="overview" class="sec on">
+
+  <div class="card">
+    <div class="ct"><span class="dot dp"></span>Module overview — 7 lessons</div>
+    <div class="lesson-grid">
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--purple)"></div><div class="lesson-num" style="color:var(--purple)">1.1</div><div class="lesson-title">Tool Stack Overview</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--blue)"></div><div class="lesson-num" style="color:var(--blue)">1.2</div><div class="lesson-title">ChatGPT, Gemini & Claude</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--coral)"></div><div class="lesson-num" style="color:var(--coral)">1.3</div><div class="lesson-title">Higgsfield AI</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--teal)"></div><div class="lesson-num" style="color:var(--teal)">1.4</div><div class="lesson-title">ElevenLabs & Hedra</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--red)"></div><div class="lesson-num" style="color:var(--red)">1.5</div><div class="lesson-title">CapCut</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--amber)"></div><div class="lesson-num" style="color:var(--amber)">1.6</div><div class="lesson-title">Kling & Nano Banana</div></div>
+      <div class="lesson-card"><div class="lesson-top" style="background:var(--green)"></div><div class="lesson-num" style="color:var(--green)">1.7</div><div class="lesson-title">Notes & Organisation</div></div>
+    </div>
+  </div>
+
+  <p class="section-label">The 3 categories</p>
+  <div class="g3" style="margin-bottom:1rem">
+    <div class="card" style="border-color:var(--blue);margin-bottom:0">
+      <div class="ct"><span class="dot db"></span>Brain</div>
+      <p class="p13">Think · Write · Strategise</p>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px">
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bb" style="margin:0;margin-right:6px">ChatGPT</span><span class="p12">Scripts, captions, strategy</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bb" style="margin:0;margin-right:6px">Gemini</span><span class="p12">Research, real-time web</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bp" style="margin:0;margin-right:6px">Claude</span><span class="p12">Deep writing, long-form, best outputs</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:var(--coral);margin-bottom:0">
+      <div class="ct"><span class="dot dc"></span>Create</div>
+      <p class="p13">Build AI content · Generate video</p>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px">
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bc" style="margin:0;margin-right:6px">Higgsfield</span><span class="p12">AI influencer — core tool</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bt" style="margin:0;margin-right:6px">ElevenLabs</span><span class="p12">AI voice synthesis</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bt" style="margin:0;margin-right:6px">Hedra</span><span class="p12">Talking avatar</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg ba" style="margin:0;margin-right:6px">Kling / Nano</span><span class="p12">Advanced AI video</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:var(--teal);margin-bottom:0">
+      <div class="ct"><span class="dot dt"></span>Distribute</div>
+      <p class="p13">Edit · Caption · Post · Grow</p>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:4px">
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg br" style="margin:0;margin-right:6px">CapCut</span><span class="p12">Edit, auto-caption, publish</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bg" style="margin:0;margin-right:6px">Notes App</span><span class="p12">Scripts, calendar, income</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg br" style="margin:0;margin-right:6px">Pinterest</span><span class="p12">Scrape inspo photos & videos</span></div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.4rem .7rem"><span class="bdg bp" style="margin:0;margin-right:6px">TikTok / IG / YT</span><span class="p12">Distribution platforms</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">The creation workflow — how all tools connect</p>
+  <div class="flow" style="margin-bottom:1.5rem">
+    <div class="flow-box" style="border:0.5px solid var(--blue)"><div class="fn" style="color:var(--blue)">ChatGPT / Claude</div><div class="fs">Write script</div></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-box" style="border:0.5px solid var(--coral)"><div class="fn" style="color:var(--coral)">Higgsfield / Kling</div><div class="fs">Generate video</div></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-box" style="border:0.5px solid var(--teal)"><div class="fn" style="color:var(--teal)">ElevenLabs / Hedra</div><div class="fs">Add AI voice</div></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-box" style="border:0.5px solid var(--red)"><div class="fn" style="color:var(--red)">CapCut</div><div class="fs">Edit & caption</div></div>
+    <div class="flow-arrow">›</div>
+    <div class="flow-box" style="border:0.5px solid var(--purple)"><div class="fn" style="color:var(--purple)">TikTok / IG / YT</div><div class="fs">Post & grow</div></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     BRAIN TOOLS — ChatGPT & Gemini
+══════════════════════════════════════════════ -->
+<div id="brain" class="sec">
+
+  <div class="tool-card blue">
+    <div class="tool-head blue"><div><div class="tool-name">ChatGPT</div><div class="tool-url">openai.com</div></div><span class="bdg bb" style="background:rgba(255,255,255,.2);color:#fff">Daily use</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label blue">What it does</div><div class="tool-text">The #1 AI brain for text. Write scripts, captions, hooks, outreach messages, content plans and entire strategies from a single prompt. Kills the blank-page problem forever.</div></div>
+      <div class="tool-row"><div class="tool-label blue">Why it matters</div><div class="tool-text">Every caption, script and idea starts here. No skill required to begin — just describe what you need and iterate. Turns 3-hour work into 10 minutes.</div></div>
+      <div class="tool-row"><div class="tool-label blue">When to use</div><div class="tool-text">Every single day — before filming (scripts), after filming (captions), for DM outreach, and for strategy planning.</div></div>
+    </div>
+  </div>
+
+  <div class="tool-card blue">
+    <div class="tool-head blue"><div><div class="tool-name">Gemini</div><div class="tool-url">gemini.google.com</div></div><span class="bdg bb" style="background:rgba(255,255,255,.2);color:#fff">Research + trends</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label blue">What it does</div><div class="tool-text">Google's AI. Excellent for research, long YouTube scripts, and summarising sources — with real-time web access built into the free tier.</div></div>
+      <div class="tool-row"><div class="tool-label blue">Why it matters</div><div class="tool-text">Real-time internet for free. Use Gemini for current trends, fresh angles, and fact-checking with live Google Search built in.</div></div>
+      <div class="tool-row"><div class="tool-label blue">When to use</div><div class="tool-text">Trend research, longer YouTube scripts, cross-checking facts, and discovering fresh niche content angles.</div></div>
+    </div>
+  </div>
+
+  <div class="tool-card purple">
+    <div class="tool-head purple"><div><div class="tool-name">Claude</div><div class="tool-url">claude.ai</div></div><span class="bdg bp" style="background:rgba(255,255,255,.2);color:#fff">Best outputs</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label purple">What it does</div><div class="tool-text">Anthropic's AI — widely considered the best model for long-form writing, nuanced content, and producing human-sounding copy. Exceptional at following complex instructions and producing polished output on the first attempt.</div></div>
+      <div class="tool-row"><div class="tool-label purple">Why it matters</div><div class="tool-text">When ChatGPT gives you generic output, Claude gives you voice. It produces the most natural, readable scripts and captions — content that doesn't feel like it was written by a robot. Use it when quality matters most.</div></div>
+      <div class="tool-row"><div class="tool-label purple">When to use</div><div class="tool-text">Long-form scripts, nuanced brand voice copy, detailed content strategies, outreach DMs that need a human tone, and any task where you want the highest quality output.</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Prompting masterclass — 4 rules for great results</p>
+
+  <div class="g2" style="margin-bottom:1rem">
+    <div class="card" style="margin-bottom:0">
+      <div class="acc" onclick="tog(this)"><div class="acc-head"><span class="p14" style="font-weight:500">1. Give it a role</span><span class="acc-arrow">›</span></div><div class="acc-body"><p class="p13">Start every prompt: <em>"You are a TikTok content creator specialising in AI tools for beginners."</em> Context = dramatically better output every time.</p></div></div>
+      <div class="acc" onclick="tog(this)"><div class="acc-head"><span class="p14" style="font-weight:500">2. Be specific</span><span class="acc-arrow">›</span></div><div class="acc-body"><p class="p13"><strong>Bad:</strong> "Write me a hook." <strong>Good:</strong> "Write 5 hooks for a video about earning €500 with TikTok Shop as a complete beginner — make them urgent and curious."</p></div></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="acc" onclick="tog(this)"><div class="acc-head"><span class="p14" style="font-weight:500">3. Specify format</span><span class="acc-arrow">›</span></div><div class="acc-body"><p class="p13">Tell it exactly what you want: "3-bullet list", "casual tone under 150 words", "table format I can copy into Notes". Format = control.</p></div></div>
+      <div class="acc" onclick="tog(this)"><div class="acc-head"><span class="p14" style="font-weight:500">4. Iterate fast</span><span class="acc-arrow">›</span></div><div class="acc-body"><p class="p13">Don't restart if the output misses. Say: "Make it shorter", "More energetic", "Add urgency at the end". Stack improvements on top of the first response.</p></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">6 ready-to-use prompts — copy, paste & adapt</p>
+
+  <div class="g2">
+    <div>
+      <div class="prompt-card"><div class="prompt-title">Script Generator</div><div class="prompt-text">You are a TikTok script writer. Write a 45-second script for a faceless AI account in the [niche] niche. Hook must stop the scroll in 3 seconds. End with a clear CTA. Tone: energetic and direct.</div></div>
+      <div class="prompt-card"><div class="prompt-title">Hook Generator</div><div class="prompt-text">Write 10 TikTok hooks for a video about [topic]. Mix POV format, curiosity gaps, counter-intuitive statements and personal story openers. One hook per line.</div></div>
+      <div class="prompt-card"><div class="prompt-title">Caption Writer</div><div class="prompt-text">Write a TikTok caption for this video: [paste script]. Include the main keyword in the first 5 words, one curiosity gap, and end with a comment CTA. Max 150 characters before the cut.</div></div>
+    </div>
+    <div>
+      <div class="prompt-card"><div class="prompt-title">Niche Research</div><div class="prompt-text">I want to start a TikTok account in the [niche] niche. Give me: 5 content angles that are currently working, 3 underserved sub-niches, and the top 3 pain points of the target audience.</div></div>
+      <div class="prompt-card"><div class="prompt-title">Brand Outreach DM</div><div class="prompt-text">Write a DM to a brand offering AI UGC content creation. I make high-converting AI video ads. Keep it under 4 lines, professional but casual, end with a soft CTA to hop on a quick call.</div></div>
+      <div class="prompt-card"><div class="prompt-title">7-Day Content Plan</div><div class="prompt-text">Create a 7-day TikTok content plan for a faceless AI account in [niche]. For each day: content type, hook idea, and CTA. Format as a clean table I can paste into my Notes app.</div></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-label">Connects to Level 2</div>
+    <div class="info-text">Every prompt above gets used in Level 2 (Marketing) — hooks become video openers, captions go under every post. Save your best outputs in your Prompt Library note (Lesson 1.7).</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     CREATE TOOLS
+══════════════════════════════════════════════ -->
+<div id="create" class="sec">
+
+  <div class="tool-card coral">
+    <div class="tool-head coral"><div><div class="tool-name">Higgsfield AI</div><div class="tool-url">higgsfield.ai  ·  CORE TOOL</div></div><span class="bdg bc" style="background:rgba(255,255,255,.2);color:#fff">Every video</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label coral">What it does</div><div class="tool-text">Creates a fully AI-generated human influencer — realistic face, body, movement — who talks, moves, and promotes your content 24/7. This is the engine of the entire faceless business model.</div></div>
+      <div class="tool-row"><div class="tool-label coral">Why it matters</div><div class="tool-text">You never appear on camera. You never record your voice. You create once and deploy forever. This is what makes zero-face, zero-audience income possible.</div></div>
+      <div class="tool-row"><div class="tool-label coral">What you can build</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+          <span class="bdg bc">AI Influencer Account</span>
+          <span class="bdg bc">Product Demo Videos</span>
+          <span class="bdg bc">UGC Content for Brands</span>
+          <span class="bdg bc">Motion Control Content</span>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-strip"><div class="price-item"><span class="price-label free-label">FREE</span>Limited generations — enough to learn</div><div class="price-item"><span class="price-label paid-label">PAID</span>Starter ~$19/mo  |  Pro ~$49/mo (unlimited)</div></div>
+  </div>
+
+  <p class="section-label">Create your first AI influencer — step by step</p>
+  <div class="card">
+    <div class="step-list">
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">1</div><div class="step-body"><div class="step-title">Go to higgsfield.ai</div><div class="step-desc">Create a free account. No credit card needed to explore.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">2</div><div class="step-body"><div class="step-title">Choose your character</div><div class="step-desc">Select from existing AI personas or upload a face image to create a custom character that becomes your brand identity.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">3</div><div class="step-body"><div class="step-title">Paste your ChatGPT script</div><div class="step-desc">Use the Script Generator prompt from Lesson 1.2. Paste the 30–60 second output into Higgsfield's text field.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">4</div><div class="step-body"><div class="step-title">Select voice & motion style</div><div class="step-desc">Pick a voice that matches your persona energy. Add motion control for natural head movement — makes it feel human.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">5</div><div class="step-body"><div class="step-title">Generate & review</div><div class="step-desc">Click generate. Free plan: limited renders. Paid: unlimited. First render takes roughly 2–5 minutes.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--coral)">6</div><div class="step-body"><div class="step-title">Export to CapCut</div><div class="step-desc">Download at highest quality. Import into CapCut (Lesson 1.5) for captions, music and final editing before posting.</div></div></div>
+    </div>
+  </div>
+
+  <div class="tip-box"><div class="tip-label">Pro tips</div><div class="tip-text">Start with a female lifestyle persona — highest engagement on TikTok/IG. Keep scripts under 45 seconds. Generate 3 variations and A/B test them on the same day. Subtle head movement via motion control makes AI feel far more human.</div></div>
+
+  <hr class="divider">
+
+  <div class="g2">
+    <div class="tool-card teal" style="margin-bottom:0">
+      <div class="tool-head teal"><div><div class="tool-name">ElevenLabs</div><div class="tool-url">elevenlabs.io</div></div></div>
+      <div class="tool-body">
+        <div class="tool-row"><div class="tool-label teal">What</div><div class="tool-text">Hyper-realistic AI voices from text. Type a script, choose a voice, get professional audio in seconds. No mic. No recording.</div></div>
+        <div class="tool-row"><div class="tool-label teal">Why</div><div class="tool-text">Voice is the most human part of a video. ElevenLabs voices pass as real humans in 95% of cases. Authenticity = trust = conversion.</div></div>
+        <div class="tool-row"><div class="tool-label teal">When</div><div class="tool-text">When Higgsfield's built-in voice doesn't match your brand, or for text-overlay videos where you want voiceover without a face.</div></div>
+      </div>
+      <div class="pricing-strip" style="flex-direction:column;gap:4px"><div class="price-item"><span class="price-label free-label">FREE</span>10,000 chars/mo (~5 min audio)</div><div class="price-item"><span class="price-label paid-label">PAID</span>Starter $5/mo  |  Creator $22/mo + voice cloning</div></div>
+    </div>
+    <div class="tool-card teal" style="margin-bottom:0">
+      <div class="tool-head teal"><div><div class="tool-name">Hedra</div><div class="tool-url">hedra.com</div></div></div>
+      <div class="tool-body">
+        <div class="tool-row"><div class="tool-label teal">What</div><div class="tool-text">Upload a photo + audio and Hedra animates the face to match the speech. Your static AI image becomes a talking video.</div></div>
+        <div class="tool-row"><div class="tool-label teal">Why</div><div class="tool-text">Talking-head videos have the highest retention on TikTok. Hedra creates them from one image — zero recording needed.</div></div>
+        <div class="tool-row"><div class="tool-label teal">Power combo</div><div class="tool-text">ElevenLabs voice → Hedra talking head → CapCut edit → Post. Full pipeline in under 20 minutes.</div></div>
+      </div>
+      <div class="pricing-strip" style="flex-direction:column;gap:4px"><div class="price-item"><span class="price-label free-label">FREE</span>Limited videos/mo — 720p</div><div class="price-item"><span class="price-label paid-label">PAID</span>Creator $29/mo — 1080p + more credits</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="g2">
+    <div class="tool-card amber" style="margin-bottom:0">
+      <div class="tool-head amber"><div><div class="tool-name">Kling AI</div><div class="tool-url">klingai.com</div></div></div>
+      <div class="tool-body">
+        <div class="tool-row"><div class="tool-label amber">What</div><div class="tool-text">Text-to-video and image-to-video AI. Generates cinematic quality clips up to 2 minutes from a text prompt alone.</div></div>
+        <div class="tool-row"><div class="tool-label amber">When</div><div class="tool-text">Premium product demos, brand showcase content, YouTube intro sequences — when visual quality is the selling point.</div></div>
+        <div class="tool-row"><div class="tool-label amber">Key feature</div><div class="tool-text">Image-to-video: take any product photo and animate it into a fluid video clip. Powerful for TikTok Shop reveals.</div></div>
+      </div>
+      <div class="pricing-strip" style="flex-direction:column;gap:4px"><div class="price-item"><span class="price-label free-label">FREE</span>Limited credits/mo</div><div class="price-item"><span class="price-label paid-label">PAID</span>Starter ~$9.99/mo  |  Pro ~$29/mo</div></div>
+    </div>
+    <div class="tool-card amber" style="margin-bottom:0">
+      <div class="tool-head amber"><div><div class="tool-name">Nano Banana</div><div class="tool-url">nanobanana.ai</div></div></div>
+      <div class="tool-body">
+        <div class="tool-row"><div class="tool-label amber">What</div><div class="tool-text">Fast, lightweight AI video generation optimised for short clips with clean motion — built for content volume.</div></div>
+        <div class="tool-row"><div class="tool-label amber">When</div><div class="tool-text">Batch content days. Quick product B-roll. Background loops. High-volume posting weeks when speed beats quality.</div></div>
+        <div class="tool-row"><div class="tool-label amber">Key feature</div><div class="tool-text">Some clips render in under 60 seconds — critical when you're posting 2–3× per day and need volume fast.</div></div>
+      </div>
+      <div class="pricing-strip" style="flex-direction:column;gap:4px"><div class="price-item"><span class="price-label free-label">FREE</span>Daily credits available</div><div class="price-item"><span class="price-label paid-label">PAID</span>From ~$12/mo</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     DISTRIBUTE — CapCut + Organisation
+══════════════════════════════════════════════ -->
+<div id="distribute" class="sec">
+
+  <div class="tool-card red">
+    <div class="tool-head red"><div><div class="tool-name">CapCut</div><div class="tool-url">capcut.com  ·  100% FREE</div></div><span class="bdg br" style="background:rgba(255,255,255,.2);color:#fff">Every video</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label red">Why it's the only editor you need</div><div class="tool-text">Free, mobile-first, built for short-form content, and deeply integrated with TikTok. Auto-captions, AI background removal, beat sync, speed ramping, and viral templates — all at zero cost.</div></div>
+      <div class="tool-row"><div class="tool-label red">Key features</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+          <span class="bdg br">Auto Captions</span><span class="bdg br">Speed Ramping</span><span class="bdg br">AI Background Removal</span><span class="bdg br">Beat Sync</span><span class="bdg br">Text Animations</span><span class="bdg br">Viral Templates</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">Standard editing workflow — do this in order every time</p>
+  <div class="card">
+    <div class="step-list">
+      <div class="step-item"><div class="step-num" style="background:var(--red)">1</div><div class="step-body"><div class="step-title">Import footage</div><div class="step-desc">Drag your Higgsfield/Hedra/Kling video into a new CapCut project. Trim dead air at start and end immediately.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--red)">2</div><div class="step-body"><div class="step-title">Add auto captions</div><div class="step-desc">Tap Auto Captions — review and fix any errors. Choose a bold, readable style. Always on — no exceptions. Captions increase watch time up to 40%.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--red)">3</div><div class="step-body"><div class="step-title">Add background music</div><div class="step-desc">Choose trending audio from CapCut's library or import from TikTok. Set music at 15–20% volume under the voice.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--red)">4</div><div class="step-body"><div class="step-title">Add hook text overlay</div><div class="step-desc">Bold text on screen in the first 2 seconds. This appears before the viewer processes the audio — double-layer hook.</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--red)">5</div><div class="step-body"><div class="step-title">Add CTA card</div><div class="step-desc">Final 3 seconds: text overlay with your one CTA — "Follow for part 2", "Link in bio", or "Comment X below".</div></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--red)">6</div><div class="step-body"><div class="step-title">Export and post</div><div class="step-desc">Export at 1080p. Post from CapCut directly to TikTok or save and post manually to keep scheduling control.</div></div></div>
+    </div>
+  </div>
+
+  <div class="info-box"><div class="info-label">Connects to Level 2</div><div class="info-text">In Level 2 (Marketing) you learn exactly which hooks and captions to add inside CapCut to maximise retention. The tool skill (L1) + marketing knowledge (L2) = the complete content system.</div></div>
+
+  <hr class="divider">
+
+  <div class="tool-card red">
+    <div class="tool-head red"><div><div class="tool-name">Pinterest</div><div class="tool-url">pinterest.com  ·  100% FREE</div></div><span class="bdg br" style="background:rgba(255,255,255,.2);color:#fff">Inspo scraping</span></div>
+    <div class="tool-body">
+      <div class="tool-row"><div class="tool-label red">What it does</div><div class="tool-text">The world's largest visual inspiration database. Search any niche, style, or aesthetic and instantly surface thousands of photos, video clips, and creative concepts — all free, no account needed to browse.</div></div>
+      <div class="tool-row"><div class="tool-label red">Why it matters</div><div class="tool-text">Content ideas come from what's already working. Pinterest shows you proven visual styles, trending aesthetics, and evergreen content formats before you spend a second creating. It's your creative research tool.</div></div>
+      <div class="tool-row"><div class="tool-label red">How to use it</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+          <span class="bdg br">Search your niche + "aesthetic"</span><span class="bdg br">Save inspo to boards</span><span class="bdg br">Screenshot winning layouts</span><span class="bdg br">Find video style references</span>
+        </div>
+      </div>
+      <div class="tool-row"><div class="tool-label red">When to use</div><div class="tool-text">Before every batch session — 10 minutes on Pinterest gives you a week's worth of creative direction. Save boards per niche (e.g. "AI Beauty Inspo", "Lifestyle Hooks"). Feed images into ChatGPT or Claude for prompt ideas.</div></div>
+    </div>
+    <div class="pricing-strip"><div class="price-item"><span class="price-label free-label">FREE</span>Entirely free — no paid tier needed for inspo scraping</div></div>
+  </div>
+
+  <hr class="divider">
+
+  <p class="section-label">Lesson 1.7 — Notes & organisation system</p>
+  <div class="card"><div class="ct"><span class="dot dg"></span>Your 4 core notes — set up today, use forever</div>
+    <div class="g2">
+      <div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.75rem;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">Content Ideas Note</div>
+          <div class="p13">One note for raw ideas. Every time something sparks — write it immediately. Review before every batch session. This becomes your content vault.</div>
+          <div style="margin-top:5px"><span class="bdg bg">Apple Notes</span><span class="bdg bg">Notion</span></div>
+        </div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.75rem">
+          <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">Weekly Content Calendar</div>
+          <div class="p13">Plan Sunday for the whole week. What you're posting each day, which hook, which CTA. Pre-planning removes daily decision fatigue.</div>
+          <div style="margin-top:5px"><span class="bdg bg">Apple Notes</span><span class="bdg bg">Google Sheets</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.75rem;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">Prompt Library</div>
+          <div class="p13">Save every ChatGPT prompt that produced a great result. Your personal prompt database compounds in value over time.</div>
+          <div style="margin-top:5px"><span class="bdg bg">Notion</span><span class="bdg bg">Apple Notes</span></div>
+        </div>
+        <div style="background:var(--gray-bg);border-radius:var(--r-md);padding:.75rem">
+          <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px">Income Tracker</div>
+          <div class="p13">Screenshot every commission and payment. Track weekly totals. Seeing growth — even small — is the single most powerful motivation fuel.</div>
+          <div style="margin-top:5px"><span class="bdg bg">Google Sheets</span><span class="bdg bg">Notion</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     WHICH TOOL?
+══════════════════════════════════════════════ -->
+<div id="which" class="sec">
+
+  <div class="card"><div class="ct"><span class="dot dp"></span>Which tool for which job — quick decision guide</div>
+    <div class="which-grid">
+      <div class="which-card"><div class="which-use">AI influencer talking to camera</div><div class="which-tool" style="color:var(--coral)">Higgsfield AI</div></div>
+      <div class="which-card"><div class="which-use">Cinematic product video</div><div class="which-tool" style="color:var(--amber)">Kling AI</div></div>
+      <div class="which-card"><div class="which-use">Fast batch content clips</div><div class="which-tool" style="color:var(--amber)">Nano Banana</div></div>
+      <div class="which-card"><div class="which-use">Talking head from photo + audio</div><div class="which-tool" style="color:var(--teal)">Hedra</div></div>
+      <div class="which-card"><div class="which-use">Voiceover without showing a face</div><div class="which-tool" style="color:var(--teal)">ElevenLabs</div></div>
+      <div class="which-card"><div class="which-use">Write scripts, captions, hooks</div><div class="which-tool" style="color:var(--blue)">ChatGPT</div></div>
+      <div class="which-card"><div class="which-use">Trend research & long scripts</div><div class="which-tool" style="color:var(--blue)">Gemini</div></div>
+      <div class="which-card"><div class="which-use">Best quality writing & voice</div><div class="which-tool" style="color:var(--purple)">Claude</div></div>
+      <div class="which-card"><div class="which-use">Edit, add captions, publish</div><div class="which-tool" style="color:var(--red)">CapCut</div></div>
+      <div class="which-card"><div class="which-use">Scrape photo & video inspo</div><div class="which-tool" style="color:var(--red)">Pinterest</div></div>
+      <div class="which-card"><div class="which-use">Scripts, ideas, income log</div><div class="which-tool" style="color:var(--green)">Notes App</div></div>
+    </div>
+  </div>
+
+  <p class="section-label">Complete tool reference</p>
+  <div style="overflow-x:auto">
+    <table class="ref-table">
+      <thead><tr><th>Tool</th><th>Primary use</th><th>When</th><th>Pricing</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tool-dot" style="background:var(--blue)"></span><strong>ChatGPT</strong></td><td>Scripts, captions, strategy</td><td>Daily</td><td>Free / Paid</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--blue)"></span><strong>Gemini</strong></td><td>Research, trends, long scripts</td><td>Weekly</td><td>Free / Paid</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--purple)"></span><strong>Claude</strong></td><td>Best quality writing & copy</td><td>Quality tasks</td><td>Free / Paid</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--coral)"></span><strong>Higgsfield</strong></td><td>AI influencer + video creation</td><td>Every video</td><td>Free / $19+/mo</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--teal)"></span><strong>ElevenLabs</strong></td><td>AI voice synthesis</td><td>Every video</td><td>Free / $5+/mo</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--teal)"></span><strong>Hedra</strong></td><td>Talking avatar from photo + audio</td><td>Alternate tool</td><td>Free / $29/mo</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--amber)"></span><strong>Kling AI</strong></td><td>Cinematic AI video generation</td><td>Premium content</td><td>Free / $10+/mo</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--amber)"></span><strong>Nano Banana</strong></td><td>Fast batch video clips</td><td>Batch days</td><td>Free / $12+/mo</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--red)"></span><strong>CapCut</strong></td><td>Edit, caption, publish</td><td>Every video</td><td>Free</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--red)"></span><strong>Pinterest</strong></td><td>Scrape photo & video inspo</td><td>Batch prep</td><td>Free</td></tr>
+        <tr><td><span class="tool-dot" style="background:var(--green)"></span><strong>Notes App</strong></td><td>Ideas, calendar, prompts, income</td><td>Daily</td><td>Free</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     CHALLENGES
+══════════════════════════════════════════════ -->
+<div id="challenges" class="sec">
+
+  <div class="card">
+    <div class="ct"><span class="dot dp"></span>Community challenges — compete, win, grow</div>
+    <p class="p14" style="margin-bottom:10px">Every week and every month we run community challenges inside AI Wealth Group. This is where you prove what you've learned, get real feedback, and win actual cash prizes. The best submissions win — no favouritism, just results.</p>
+  </div>
+
+  <!-- Weekly challenge -->
+  <div class="challenge-card weekly">
+    <div class="challenge-head weekly">
+      <div>
+        <div class="challenge-title">Weekly Challenge</div>
+        <div style="font-size:13px;color:var(--amber);margin-top:2px">Resets every Monday · Results every Sunday</div>
+      </div>
+      <div class="prize-pill weekly">Cash Prize</div>
+    </div>
+    <div class="challenge-body">
+      <p class="section-label" style="margin-bottom:8px">This week's categories — enter any or all</p>
+      <div class="challenge-cats">
+        <div class="challenge-cat"><div class="challenge-cat-icon">🤖</div><div class="challenge-cat-text">Best AI Character Created</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">📦</div><div class="challenge-cat-text">Best Product Video Made</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">🔥</div><div class="challenge-cat-text">Most Viral Video (views)</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">🎯</div><div class="challenge-cat-text">Best Hook of the Week</div></div>
+      </div>
+      <hr class="divider" style="margin:.75rem 0">
+      <p class="section-label" style="margin-bottom:8px">How to enter</p>
+      <div class="rules-list">
+        <div class="rule-item"><div class="rule-dot amber"></div><span class="p14">Post your submission inside the community with the tag <strong>#WeeklyChallenge</strong></span></div>
+        <div class="rule-item"><div class="rule-dot amber"></div><span class="p14">For viral submissions: include a screenshot of your TikTok/IG analytics showing view count</span></div>
+        <div class="rule-item"><div class="rule-dot amber"></div><span class="p14">For AI character or product video: post the direct video link or upload to the community thread</span></div>
+        <div class="rule-item"><div class="rule-dot amber"></div><span class="p14">One submission per category per week. You can enter multiple categories.</span></div>
+        <div class="rule-item"><div class="rule-dot amber"></div><span class="p14">Winners announced every Sunday — prize paid out within 48 hours</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly challenge -->
+  <div class="challenge-card monthly">
+    <div class="challenge-head monthly">
+      <div>
+        <div class="challenge-title">Monthly Challenge</div>
+        <div style="font-size:13px;color:var(--purple-mid);margin-top:2px">Runs all month · Grand prize announced on the 1st</div>
+      </div>
+      <div class="prize-pill monthly">Grand Cash Prize</div>
+    </div>
+    <div class="challenge-body">
+      <p class="section-label" style="margin-bottom:8px">Monthly categories — bigger scope, bigger prizes</p>
+      <div class="challenge-cats">
+        <div class="challenge-cat"><div class="challenge-cat-icon">👑</div><div class="challenge-cat-text">Best AI Character of the Month</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">📈</div><div class="challenge-cat-text">Most Viral Video of the Month</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">💰</div><div class="challenge-cat-text">Highest Earnings Reported</div></div>
+        <div class="challenge-cat"><div class="challenge-cat-icon">🚀</div><div class="challenge-cat-text">Biggest Account Growth</div></div>
+      </div>
+      <hr class="divider" style="margin:.75rem 0">
+      <p class="section-label" style="margin-bottom:8px">Monthly rules & judging</p>
+      <div class="rules-list">
+        <div class="rule-item"><div class="rule-dot purple"></div><span class="p14">Tag posts with <strong>#MonthlyChallenge</strong> — any post during the month qualifies automatically</span></div>
+        <div class="rule-item"><div class="rule-dot purple"></div><span class="p14">Viral & growth submissions require a before/after analytics screenshot showing the full month</span></div>
+        <div class="rule-item"><div class="rule-dot purple"></div><span class="p14">Earnings submission: screenshot of total commissions/revenue for the calendar month</span></div>
+        <div class="rule-item"><div class="rule-dot purple"></div><span class="p14">Top 3 in each category are shortlisted — community votes for the winner from the shortlist</span></div>
+        <div class="rule-item"><div class="rule-dot purple"></div><span class="p14">Grand prize winner announced on the 1st of the following month — paid within 48 hours</span></div>
+      </div>
+
+      <div class="warn-box" style="margin-top:1rem;margin-bottom:0">
+        <div class="warn-label">Why this matters for you</div>
+        <div class="tip-text">Challenges create accountability, deadlines, and a reason to post even when motivation dips. The students who consistently enter challenges are the ones who grow fastest — the prize is the bonus, the execution is the real reward.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <div class="success-label">Community rule</div>
+    <div class="tip-text">Every submission gets genuine feedback from the community and coaches — not just likes. Post something, learn something. This is the fastest feedback loop in your entire business.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     HOMEWORK
+══════════════════════════════════════════════ -->
+<div id="homework" class="sec">
+
+  <div class="card"><div class="ct"><span class="dot dp"></span>Level 1 homework — post every milestone inside the community</div>
+    <p class="p14" style="margin-bottom:12px">Each lesson has a task. Posting inside the community creates accountability pressure — the single biggest predictor of whether students finish or drop off.</p>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="hw-box">
+        <div class="hw-title" style="color:var(--purple)">After Lesson 1.1 — Stack Overview</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post: "Stack is set up. The tool I'm most excited about is [X] because [reason]."</span></div>
+      </div>
+      <div class="hw-box" style="margin-top:8px">
+        <div class="hw-title" style="color:var(--blue)">After Lesson 1.2 — ChatGPT, Gemini & Claude</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Generate your first TikTok script using the Script Generator prompt</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Generate 10 hooks using the Hook Generator prompt</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post a screenshot of your ChatGPT conversation in the community</span></div>
+      </div>
+      <div class="hw-box" style="margin-top:8px">
+        <div class="hw-title" style="color:var(--coral)">After Lesson 1.3 — Higgsfield</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Create your first AI influencer character — screenshot the setup</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Generate one 30-second video using your ChatGPT script</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post the video link or screenshot — first AI video milestone</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="hw-box">
+        <div class="hw-title" style="color:var(--teal)">After Lesson 1.4 — ElevenLabs & Hedra</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Generate a voice sample in ElevenLabs using a 2-sentence script</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Create one talking-head clip in Hedra: AI image + ElevenLabs audio</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post screenshot or clip in the community thread</span></div>
+      </div>
+      <div class="hw-box" style="margin-top:8px">
+        <div class="hw-title" style="color:var(--red)">After Lesson 1.5 — CapCut</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Edit your Higgsfield video — add auto captions + one text hook overlay</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Export — this is your first completed piece of content</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post a screenshot of your CapCut timeline in the community</span></div>
+      </div>
+      <div class="hw-box" style="margin-top:8px">
+        <div class="hw-title" style="color:var(--green)">After Lessons 1.6 & 1.7 — Final</div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Set up your 4 notes: Ideas, Calendar, Prompt Library, Income Tracker</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post your first week's content plan in the community</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span>Post your first video on TikTok or Instagram — Level 1 complete</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level completion checklist -->
+  <div style="background:rgba(124,111,247,0.1);border:0.5px solid rgba(124,111,247,0.25);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-top:1rem">
+    <div style="font-size:13px;font-weight:600;color:var(--purple-mid);margin-bottom:8px">Level 1 completion checklist — before moving to Level 2</div>
+    <div class="g2">
+      <div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span class="p13">First AI influencer character created in Higgsfield</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span class="p13">First completed video edited in CapCut with captions</span></div>
+      </div>
+      <div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span class="p13">4 organisation notes set up in Notes App or Notion</span></div>
+        <div class="hw-item"><input type="checkbox" class="hw-cb"><span class="p13">First video posted on TikTok or Instagram</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bridge to Level 2 -->
+  <div class="bridge-banner">
+    <div class="bridge-title">Level 1 complete — you have the full tool stack. Now it's time to deploy it.</div>
+    <div class="bridge-sub">Next: Level 2 — Marketing, Setup & Content Creation → Turn these tools into an audience and income. You already know how to make the content. Level 2 teaches you how to make it go viral.<br><br><span style="color:var(--gray-light)">Creation — Distribution — Money</span></div>
+  </div>
+
+</div>
+
+</div><!-- end wrap -->
+
+<script>
+function sw(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+}
+function tog(el){
+  const b=el.querySelector('.acc-body'),a=el.querySelector('.acc-arrow');
+  b.classList.toggle('open');a.classList.toggle('open');
+}
+</script>
+</body>
+</html>
